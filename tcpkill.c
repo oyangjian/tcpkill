@@ -27,6 +27,8 @@ int	Opt_severity = DEFAULT_SEVERITY;
 int	pcap_off;
 pcap_t  *pd;
 int     Opt_max_kill = 0;
+time_t  start_time = 0;
+int		Opt_max_timeout_seconds = 30;
 int     kill_counter = 0;
 
 static void
@@ -95,6 +97,13 @@ tcp_kill_cb(u_char *user, const struct pcap_pkthdr *pcap, const u_char *pkt)
         if (Opt_max_kill && kill_counter >= Opt_max_kill) {
           pcap_breakloop(pd);
         }
+        if (time(NULL) - start_time > Opt_max_timeout_seconds) {
+          pcap_breakloop(pd);
+        }
+}
+
+void alarm_handler(int sig) {
+    pcap_breakloop(pd);
 }
 
 int
@@ -116,6 +125,9 @@ main(int argc, char *argv[])
 			break;
 		case 'm':
 			Opt_max_kill = atoi(optarg);
+			break;
+		case 't':
+			Opt_max_timeout_seconds = atoi(optarg);
 			break;
 		case '0': case '1': case '2': case '3': case '4':
 		case '5': case '6': case '7': case '8': case '9':
@@ -154,6 +166,9 @@ main(int argc, char *argv[])
 	
 	warnx("listening on %s [%s]", intf, filter);
 	
+	start_time = time(NULL);
+	alarm(Opt_max_timeout_seconds);
+    signal(SIGALRM, alarm_handler);
 	pcap_loop(pd, -1, tcp_kill_cb, (u_char *)l);
   
 	/* NOTREACHED */
