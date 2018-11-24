@@ -6,8 +6,8 @@ CROSS_COMPILE ?= $(ARM_INSTALL)tool/gcc-linaro-arm-linux-gnueabihf-4.7-2012.11-2
 
 CC = $(CROSS_COMPILE)gcc
 STRIP = $(CROSS_COMPILE)strip
-CFLAGS += -I $(ARM_INSTALL)install/include
-LDFLAGS = -L $(ARM_INSTALL)install/lib
+CFLAGS += -I $(ARM_INSTALL)/include
+LDFLAGS = -L $(ARM_INSTALL)/lib
 LDFLAGS += -lpcap -lnet
 LDFLAGS += -static
 
