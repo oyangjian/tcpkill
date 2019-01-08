@@ -69,7 +69,7 @@ pcap_init(char *intf, char *filter, int snaplen)
 		warnx("%s", ebuf);
 		return (NULL);
 	}
-	if ((pd = pcap_open_live(intf, snaplen, 1, 512, ebuf)) == NULL) {
+	if ((pd = pcap_open_live(intf, snaplen, 0, 512, ebuf)) == NULL) {
 		warnx("%s", ebuf);
 		return (NULL);
 	}
