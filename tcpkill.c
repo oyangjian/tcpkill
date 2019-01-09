@@ -118,7 +118,7 @@ main(int argc, char *argv[])
 	
 	intf = NULL;
 	
-	while ((c = getopt(argc, argv, "i:m:123456789h?V")) != -1) {
+	while ((c = getopt(argc, argv, "i:m:t:123456789h?V")) != -1) {
 		switch (c) {
 		case 'i':
 			intf = optarg;
